@@ -3,6 +3,6 @@ dist
 .DS_Store
 .env
 tmp
-apps/api/db/migrations/*.down.sql
+
 apps/api/main
 apps/api/api

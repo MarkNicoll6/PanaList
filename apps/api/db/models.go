@@ -8,10 +8,211 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type AdCreative struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	ZoneID      pgtype.UUID        `json:"zone_id"`
+	Title       pgtype.Text        `json:"title"`
+	ImageUrl    string             `json:"image_url"`
+	TargetUrl   string             `json:"target_url"`
+	StartsAt    pgtype.Timestamptz `json:"starts_at"`
+	EndsAt      pgtype.Timestamptz `json:"ends_at"`
+	Impressions pgtype.Int4        `json:"impressions"`
+	Clicks      pgtype.Int4        `json:"clicks"`
+	Status      pgtype.Text        `json:"status"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type AdZone struct {
+	ID           pgtype.UUID        `json:"id"`
+	TenantID     pgtype.UUID        `json:"tenant_id"`
+	Code         string             `json:"code"`
+	Name         string             `json:"name"`
+	Placement    string             `json:"placement"`
+	Size         pgtype.Text        `json:"size"`
+	PricingCents pgtype.Int4        `json:"pricing_cents"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+}
+
+type ApiKey struct {
+	ID         pgtype.UUID        `json:"id"`
+	TenantID   pgtype.UUID        `json:"tenant_id"`
+	Name       string             `json:"name"`
+	Hash       string             `json:"hash"`
+	ScopesJson []byte             `json:"scopes_json"`
+	LastUsedAt pgtype.Timestamptz `json:"last_used_at"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+	RevokedAt  pgtype.Timestamptz `json:"revoked_at"`
+}
+
+type BlocksMarket struct {
+	ID             pgtype.UUID        `json:"id"`
+	AuthorTenantID pgtype.UUID        `json:"author_tenant_id"`
+	Name           string             `json:"name"`
+	Version        string             `json:"version"`
+	PriceCents     pgtype.Int4        `json:"price_cents"`
+	SchemaJson     []byte             `json:"schema_json"`
+	BundleUrl      pgtype.Text        `json:"bundle_url"`
+	Status         pgtype.Text        `json:"status"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+}
+
+type Category struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Name        string             `json:"name"`
+	Slug        string             `json:"slug"`
+	Description pgtype.Text        `json:"description"`
+	ParentID    pgtype.UUID        `json:"parent_id"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type FederationIndex struct {
+	ID             pgtype.UUID        `json:"id"`
+	TenantID       pgtype.UUID        `json:"tenant_id"`
+	ListingID      pgtype.UUID        `json:"listing_id"`
+	NormalizedJson []byte             `json:"normalized_json"`
+	LastSyncedAt   pgtype.Timestamptz `json:"last_synced_at"`
+}
+
+type FederationOptin struct {
+	TenantID       pgtype.UUID        `json:"tenant_id"`
+	Enabled        bool               `json:"enabled"`
+	CategoriesJson []byte             `json:"categories_json"`
+	RegionsJson    []byte             `json:"regions_json"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+}
+
+type FederationQuery struct {
+	ID           pgtype.UUID        `json:"id"`
+	Query        string             `json:"query"`
+	FiltersJson  []byte             `json:"filters_json"`
+	ResultsCount int32              `json:"results_count"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+}
+
+type Listing struct {
+	ID            pgtype.UUID        `json:"id"`
+	TenantID      pgtype.UUID        `json:"tenant_id"`
+	Title         string             `json:"title"`
+	Slug          string             `json:"slug"`
+	Summary       pgtype.Text        `json:"summary"`
+	DescriptionMd pgtype.Text        `json:"description_md"`
+	Website       pgtype.Text        `json:"website"`
+	CategoryID    pgtype.UUID        `json:"category_id"`
+	Status        pgtype.Text        `json:"status"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+}
+
+type ListingEvent struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	ListingID pgtype.UUID        `json:"listing_id"`
+	Event     string             `json:"event"`
+	MetaJson  []byte             `json:"meta_json"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type ListingUpgrade struct {
+	ID                  pgtype.UUID        `json:"id"`
+	TenantID            pgtype.UUID        `json:"tenant_id"`
+	ListingID           pgtype.UUID        `json:"listing_id"`
+	Tier                string             `json:"tier"`
+	StartsAt            pgtype.Timestamptz `json:"starts_at"`
+	EndsAt              pgtype.Timestamptz `json:"ends_at"`
+	StripePaymentIntent pgtype.Text        `json:"stripe_payment_intent"`
+	Status              string             `json:"status"`
+	CreatedAt           pgtype.Timestamptz `json:"created_at"`
+}
+
+type Medium struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	Filename  string             `json:"filename"`
+	Url       string             `json:"url"`
+	MimeType  pgtype.Text        `json:"mime_type"`
+	SizeBytes pgtype.Int8        `json:"size_bytes"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
 type Membership struct {
 	TenantID pgtype.UUID `json:"tenant_id"`
 	UserID   pgtype.UUID `json:"user_id"`
 	Role     string      `json:"role"`
+}
+
+type MetricsDaily struct {
+	TenantID          pgtype.UUID `json:"tenant_id"`
+	Date              pgtype.Date `json:"date"`
+	Pageviews         pgtype.Int4 `json:"pageviews"`
+	UniqueVisitors    pgtype.Int4 `json:"unique_visitors"`
+	OutboundClicks    pgtype.Int4 `json:"outbound_clicks"`
+	SearchQueriesJson []byte      `json:"search_queries_json"`
+}
+
+type Page struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Title       string             `json:"title"`
+	Slug        string             `json:"slug"`
+	ContentJson []byte             `json:"content_json"`
+	Status      pgtype.Text        `json:"status"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type PersonalisationRule struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	RuleJson  []byte             `json:"rule_json"`
+	IsActive  pgtype.Bool        `json:"is_active"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type Plan struct {
+	ID           pgtype.UUID        `json:"id"`
+	TenantID     pgtype.UUID        `json:"tenant_id"`
+	Code         string             `json:"code"`
+	Name         string             `json:"name"`
+	PriceCents   int32              `json:"price_cents"`
+	Interval     string             `json:"interval"`
+	FeaturesJson []byte             `json:"features_json"`
+	IsActive     pgtype.Bool        `json:"is_active"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+}
+
+type Post struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Title       string             `json:"title"`
+	Slug        string             `json:"slug"`
+	ContentJson []byte             `json:"content_json"`
+	Excerpt     pgtype.Text        `json:"excerpt"`
+	Status      pgtype.Text        `json:"status"`
+	PublishedAt pgtype.Timestamptz `json:"published_at"`
+	AuthorID    pgtype.UUID        `json:"author_id"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type Recommendation struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	ListingID   pgtype.UUID        `json:"listing_id"`
+	Score       float64            `json:"score"`
+	ContextJson []byte             `json:"context_json"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type Subscription struct {
+	ID               pgtype.UUID        `json:"id"`
+	TenantID         pgtype.UUID        `json:"tenant_id"`
+	PlanID           pgtype.UUID        `json:"plan_id"`
+	Status           string             `json:"status"`
+	CurrentPeriodEnd pgtype.Timestamptz `json:"current_period_end"`
+	StripeSubID      pgtype.Text        `json:"stripe_sub_id"`
+	CreatedAt        pgtype.Timestamptz `json:"created_at"`
 }
 
 type Tenant struct {
@@ -24,10 +225,53 @@ type Tenant struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
+type TenantInstall struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	ItemType  string             `json:"item_type"`
+	ItemID    pgtype.UUID        `json:"item_id"`
+	Version   pgtype.Text        `json:"version"`
+	Status    pgtype.Text        `json:"status"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type ThemesMarket struct {
+	ID             pgtype.UUID        `json:"id"`
+	AuthorTenantID pgtype.UUID        `json:"author_tenant_id"`
+	Name           string             `json:"name"`
+	ThumbUrl       pgtype.Text        `json:"thumb_url"`
+	PriceCents     pgtype.Int4        `json:"price_cents"`
+	MetadataJson   []byte             `json:"metadata_json"`
+	Status         pgtype.Text        `json:"status"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+}
+
 type User struct {
 	ID        pgtype.UUID        `json:"id"`
 	Email     string             `json:"email"`
 	Name      pgtype.Text        `json:"name"`
 	AvatarUrl pgtype.Text        `json:"avatar_url"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type WebhookDelivery struct {
+	ID            pgtype.UUID        `json:"id"`
+	TenantID      pgtype.UUID        `json:"tenant_id"`
+	EndpointID    pgtype.UUID        `json:"endpoint_id"`
+	Event         string             `json:"event"`
+	PayloadJson   []byte             `json:"payload_json"`
+	Status        string             `json:"status"`
+	Attempts      int32              `json:"attempts"`
+	LastAttemptAt pgtype.Timestamptz `json:"last_attempt_at"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+}
+
+type WebhookEndpoint struct {
+	ID         pgtype.UUID        `json:"id"`
+	TenantID   pgtype.UUID        `json:"tenant_id"`
+	Url        string             `json:"url"`
+	Secret     string             `json:"secret"`
+	EventsJson []byte             `json:"events_json"`
+	IsActive   bool               `json:"is_active"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
 }

@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS ad_creatives;
+DROP TABLE IF EXISTS ad_zones;
+DROP TABLE IF EXISTS listing_upgrades;
+DROP TABLE IF EXISTS subscriptions;
+DROP TABLE IF EXISTS plans;
+DROP TABLE IF EXISTS listings;
+DROP TABLE IF EXISTS categories;

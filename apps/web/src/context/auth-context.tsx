@@ -1,44 +1,53 @@
-import React, { createContext, useContext, useState } from 'react';
+"use client";
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 
 interface AuthContextType {
     token: string | null;
     login: (email: string) => Promise<void>;
-    verify: (token: string) => Promise<void>;
+    verify: (token: string) => void;
     logout: () => void;
+    isAuthenticated: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+    const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
 
     const login = async (email: string) => {
-        const res = await api.post('/auth/magic-link', { email });
-        console.log('Magic Link Response:', res.data);
+        await api.post('/auth/magic-link', { email });
     };
 
-    const verify = async (magicToken: string) => {
-        const res = await api.post('/auth/verify', { token: magicToken });
-        const accessToken = res.data.token;
-        setToken(accessToken);
-        localStorage.setItem('token', accessToken);
+    const verify = (newToken: string) => {
+        localStorage.setItem('token', newToken);
+        setToken(newToken);
     };
 
     const logout = () => {
-        setToken(null);
         localStorage.removeItem('token');
+        setToken(null);
     };
 
     return (
-        <AuthContext.Provider value={{ token, login, verify, logout }}>
+        <AuthContext.Provider value={{ token, login, verify, logout, isAuthenticated: !!token }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
-export const useAuth = () => {
+export function useAuth() {
     const context = useContext(AuthContext);
-    if (!context) throw new Error('useAuth must be used within AuthProvider');
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
     return context;
-};
+}
