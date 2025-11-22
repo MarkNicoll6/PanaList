@@ -20,6 +20,7 @@ type Querier interface {
 	CreateListing(ctx context.Context, arg CreateListingParams) (Listing, error)
 	CreateMedia(ctx context.Context, arg CreateMediaParams) (Medium, error)
 	CreateMembership(ctx context.Context, arg CreateMembershipParams) (Membership, error)
+	CreateOpsFinding(ctx context.Context, arg CreateOpsFindingParams) (OpsFinding, error)
 	CreatePage(ctx context.Context, arg CreatePageParams) (Page, error)
 	CreatePersonalisationRule(ctx context.Context, arg CreatePersonalisationRuleParams) (PersonalisationRule, error)
 	CreatePlan(ctx context.Context, arg CreatePlanParams) (Plan, error)
@@ -27,6 +28,7 @@ type Querier interface {
 	CreateSubscription(ctx context.Context, arg CreateSubscriptionParams) (Subscription, error)
 	CreateTenant(ctx context.Context, arg CreateTenantParams) (Tenant, error)
 	CreateTheme(ctx context.Context, arg CreateThemeParams) (ThemesMarket, error)
+	CreateTrendSignal(ctx context.Context, arg CreateTrendSignalParams) (TrendSignal, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateWebhookDelivery(ctx context.Context, arg CreateWebhookDeliveryParams) (WebhookDelivery, error)
 	CreateWebhookEndpoint(ctx context.Context, arg CreateWebhookEndpointParams) (WebhookEndpoint, error)
@@ -50,14 +52,17 @@ type Querier interface {
 	ListCategories(ctx context.Context, tenantID pgtype.UUID) ([]Category, error)
 	ListListings(ctx context.Context, tenantID pgtype.UUID) ([]Listing, error)
 	ListMedia(ctx context.Context, tenantID pgtype.UUID) ([]Medium, error)
+	ListOpsFindings(ctx context.Context, tenantID pgtype.UUID) ([]OpsFinding, error)
 	ListPages(ctx context.Context, tenantID pgtype.UUID) ([]Page, error)
 	ListPersonalisationRules(ctx context.Context, tenantID pgtype.UUID) ([]PersonalisationRule, error)
 	ListPlans(ctx context.Context, tenantID pgtype.UUID) ([]Plan, error)
 	ListPosts(ctx context.Context, tenantID pgtype.UUID) ([]Post, error)
 	ListThemes(ctx context.Context) ([]ThemesMarket, error)
+	ListTopTrends(ctx context.Context, tenantID pgtype.UUID) ([]TrendSignal, error)
 	ListWebhookEndpoints(ctx context.Context, tenantID pgtype.UUID) ([]WebhookEndpoint, error)
 	LogFederationQuery(ctx context.Context, arg LogFederationQueryParams) error
 	RecordListingEvent(ctx context.Context, arg RecordListingEventParams) (ListingEvent, error)
+	ResolveOpsFinding(ctx context.Context, arg ResolveOpsFindingParams) error
 	RevokeAPIKey(ctx context.Context, arg RevokeAPIKeyParams) error
 	SearchFederationIndex(ctx context.Context, query string) ([]FederationIndex, error)
 	UpdateListingStatus(ctx context.Context, arg UpdateListingStatusParams) (Listing, error)

@@ -13,4 +13,17 @@ api.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
+    return config;
+});
+
+export const apiV3 = axios.create({
+    baseURL: 'http://localhost:8080/api/v3',
+});
+
+apiV3.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });

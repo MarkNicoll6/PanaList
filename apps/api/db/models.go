@@ -151,6 +151,19 @@ type MetricsDaily struct {
 	SearchQueriesJson []byte      `json:"search_queries_json"`
 }
 
+type OpsFinding struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Type        string             `json:"type"`
+	Entity      string             `json:"entity"`
+	EntityID    pgtype.UUID        `json:"entity_id"`
+	Severity    string             `json:"severity"`
+	DetailsJson []byte             `json:"details_json"`
+	Status      string             `json:"status"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	ResolvedAt  pgtype.Timestamptz `json:"resolved_at"`
+}
+
 type Page struct {
 	ID          pgtype.UUID        `json:"id"`
 	TenantID    pgtype.UUID        `json:"tenant_id"`
@@ -244,6 +257,15 @@ type ThemesMarket struct {
 	MetadataJson   []byte             `json:"metadata_json"`
 	Status         pgtype.Text        `json:"status"`
 	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+}
+
+type TrendSignal struct {
+	ID           pgtype.UUID        `json:"id"`
+	TenantID     pgtype.UUID        `json:"tenant_id"`
+	CategoryID   pgtype.UUID        `json:"category_id"`
+	Score        float64            `json:"score"`
+	EvidenceJson []byte             `json:"evidence_json"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 type User struct {

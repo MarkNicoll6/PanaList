@@ -78,4 +78,7 @@ func (s *Server) setupRoutes() {
 
 	federationHandler := handlers.NewFederationHandler(s.Store)
 	federationHandler.RegisterRoutes(v3Group)
+
+	opsHandler := handlers.NewOpsHandler(s.Store)
+	opsHandler.RegisterRoutes(v3Group)
 }
