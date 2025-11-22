@@ -1,0 +1,16 @@
+{
+    "name": "panadirectory-monorepo",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+        "dev:api": "cd apps/api && go run main.go",
+        "dev:web": "npm run dev --workspace=web"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
