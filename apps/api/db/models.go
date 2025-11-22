@@ -67,6 +67,27 @@ type Category struct {
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
+type CommunityPost struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	AuthorID  pgtype.UUID        `json:"author_id"`
+	Title     string             `json:"title"`
+	Content   string             `json:"content"`
+	Category  string             `json:"category"`
+	Upvotes   int32              `json:"upvotes"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type CommunityReview struct {
+	ID         pgtype.UUID        `json:"id"`
+	TenantID   pgtype.UUID        `json:"tenant_id"`
+	ListingID  pgtype.UUID        `json:"listing_id"`
+	AuthorName string             `json:"author_name"`
+	Rating     int32              `json:"rating"`
+	Comment    pgtype.Text        `json:"comment"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+}
+
 type FederationIndex struct {
 	ID             pgtype.UUID        `json:"id"`
 	TenantID       pgtype.UUID        `json:"tenant_id"`
@@ -124,6 +145,15 @@ type ListingUpgrade struct {
 	StripePaymentIntent pgtype.Text        `json:"stripe_payment_intent"`
 	Status              string             `json:"status"`
 	CreatedAt           pgtype.Timestamptz `json:"created_at"`
+}
+
+type MarketplaceInstall struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Type        string             `json:"type"`
+	ExternalID  string             `json:"external_id"`
+	ConfigJson  []byte             `json:"config_json"`
+	InstalledAt pgtype.Timestamptz `json:"installed_at"`
 }
 
 type Medium struct {

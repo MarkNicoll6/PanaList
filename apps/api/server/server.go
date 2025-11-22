@@ -81,4 +81,10 @@ func (s *Server) setupRoutes() {
 
 	opsHandler := handlers.NewOpsHandler(s.Store)
 	opsHandler.RegisterRoutes(v3Group)
+
+	v3MarketplaceHandler := handlers.NewMarketplaceHandler(s.Store)
+	v3MarketplaceHandler.RegisterRoutes(v3Group)
+
+	communityHandler := handlers.NewCommunityHandler(s.Store)
+	communityHandler.RegisterRoutes(v3Group)
 }

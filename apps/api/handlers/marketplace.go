@@ -17,53 +17,69 @@ func NewMarketplaceHandler(store *db.Queries) *MarketplaceHandler {
 }
 
 func (h *MarketplaceHandler) RegisterRoutes(g *echo.Group) {
-	g.GET("/market/themes", h.ListThemes)
-	g.GET("/market/blocks", h.ListBlocks)
-	g.POST("/market/install", h.InstallItem)
+	market := g.Group("/market")
+	market.GET("/themes", h.ListThemes)
+	market.GET("/blocks", h.ListBlocks)
+	market.POST("/install", h.InstallItem)
 }
 
 func (h *MarketplaceHandler) ListThemes(c echo.Context) error {
-	themes, err := h.Store.ListThemes(c.Request().Context())
-	if err != nil {
-		// Return empty list if error or no themes
-		return c.JSON(http.StatusOK, []interface{}{})
+	// Mock Catalog
+	themes := []map[string]interface{}{
+		{
+			"id":          "theme_modern_dark",
+			"name":        "Modern Dark",
+			"description": "A sleek, dark-mode first theme for tech directories.",
+			"price":       0,
+		},
+		{
+			"id":          "theme_minimal_light",
+			"name":        "Minimal Light",
+			"description": "Clean and airy design for lifestyle directories.",
+			"price":       1900, // $19.00
+		},
 	}
 	return c.JSON(http.StatusOK, themes)
 }
 
 func (h *MarketplaceHandler) ListBlocks(c echo.Context) error {
-	blocks, err := h.Store.ListBlocks(c.Request().Context())
-	if err != nil {
-		return c.JSON(http.StatusOK, []interface{}{})
+	// Mock Catalog
+	blocks := []map[string]interface{}{
+		{
+			"id":          "block_newsletter",
+			"name":        "Newsletter Signup",
+			"description": "Capture emails with a high-converting form.",
+		},
+		{
+			"id":          "block_featured_carousel",
+			"name":        "Featured Carousel",
+			"description": "Showcase top listings in a swipeable carousel.",
+		},
 	}
 	return c.JSON(http.StatusOK, blocks)
 }
 
 func (h *MarketplaceHandler) InstallItem(c echo.Context) error {
-	// Mock install
 	var req struct {
-		Type string `json:"type"`
-		ID   string `json:"id"`
+		Type       string `json:"type"` // 'theme' or 'block'
+		ExternalID string `json:"id"`
 	}
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request"})
 	}
 
-	// Mock tenant ID
 	var tenantID pgtype.UUID
-	var itemID pgtype.UUID
-	itemID.Scan(req.ID)
+	tenantID.Scan("6a4d7bb2-493b-4910-894b-76c2b8da09c0")
 
-	_, err := h.Store.InstallItem(c.Request().Context(), db.InstallItemParams{
-		TenantID: tenantID,
-		ItemType: req.Type,
-		ItemID:   itemID,
-		Version:  pgtype.Text{String: "1.0.0", Valid: true},
+	install, err := h.Store.InstallMarketplaceItem(c.Request().Context(), db.InstallMarketplaceItemParams{
+		TenantID:   tenantID,
+		Type:       req.Type,
+		ExternalID: req.ExternalID,
+		ConfigJson: []byte("{}"),
 	})
 	if err != nil {
-		// For demo, just return success even if DB fails (e.g. due to mock IDs)
-		return c.JSON(http.StatusOK, map[string]string{"status": "installed"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"status": "installed"})
+	return c.JSON(http.StatusOK, install)
 }
