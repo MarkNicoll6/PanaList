@@ -87,4 +87,7 @@ func (s *Server) setupRoutes() {
 
 	communityHandler := handlers.NewCommunityHandler(s.Store)
 	communityHandler.RegisterRoutes(v3Group)
+
+	enterpriseHandler := handlers.NewEnterpriseHandler(s.Store)
+	enterpriseHandler.RegisterRoutes(v3Group)
 }

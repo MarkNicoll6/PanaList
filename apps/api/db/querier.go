@@ -18,6 +18,7 @@ type Querier interface {
 	CreateBlock(ctx context.Context, arg CreateBlockParams) (BlocksMarket, error)
 	CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error)
 	CreateCommunityPost(ctx context.Context, arg CreateCommunityPostParams) (CommunityPost, error)
+	CreateEnterpriseAuditLog(ctx context.Context, arg CreateEnterpriseAuditLogParams) error
 	CreateListing(ctx context.Context, arg CreateListingParams) (Listing, error)
 	CreateMedia(ctx context.Context, arg CreateMediaParams) (Medium, error)
 	CreateMembership(ctx context.Context, arg CreateMembershipParams) (Membership, error)
@@ -41,6 +42,8 @@ type Querier interface {
 	GetMembership(ctx context.Context, arg GetMembershipParams) (Membership, error)
 	GetPost(ctx context.Context, arg GetPostParams) (Post, error)
 	GetRecommendations(ctx context.Context, arg GetRecommendationsParams) ([]GetRecommendationsRow, error)
+	GetSCIMDirectory(ctx context.Context, tenantID pgtype.UUID) (ScimDirectory, error)
+	GetSSOProvider(ctx context.Context, tenantID pgtype.UUID) (SsoProvider, error)
 	GetSubscriptionByStripeID(ctx context.Context, stripeSubID pgtype.Text) (Subscription, error)
 	GetTenantByID(ctx context.Context, id pgtype.UUID) (Tenant, error)
 	GetTenantBySlug(ctx context.Context, slug string) (Tenant, error)
@@ -54,6 +57,7 @@ type Querier interface {
 	ListBlocks(ctx context.Context) ([]BlocksMarket, error)
 	ListCategories(ctx context.Context, tenantID pgtype.UUID) ([]Category, error)
 	ListCommunityPosts(ctx context.Context, tenantID pgtype.UUID) ([]CommunityPost, error)
+	ListEnterpriseAuditLogs(ctx context.Context, tenantID pgtype.UUID) ([]EnterpriseAuditLog, error)
 	ListInstalledItems(ctx context.Context, tenantID pgtype.UUID) ([]MarketplaceInstall, error)
 	ListListings(ctx context.Context, tenantID pgtype.UUID) ([]Listing, error)
 	ListMedia(ctx context.Context, tenantID pgtype.UUID) ([]Medium, error)
@@ -75,6 +79,8 @@ type Querier interface {
 	UpdatePost(ctx context.Context, arg UpdatePostParams) (Post, error)
 	UpdateSubscriptionStatus(ctx context.Context, arg UpdateSubscriptionStatusParams) (Subscription, error)
 	UpsertFederationOptIn(ctx context.Context, arg UpsertFederationOptInParams) (FederationOptin, error)
+	UpsertSCIMDirectory(ctx context.Context, arg UpsertSCIMDirectoryParams) (ScimDirectory, error)
+	UpsertSSOProvider(ctx context.Context, arg UpsertSSOProviderParams) (SsoProvider, error)
 }
 
 var _ Querier = (*Queries)(nil)

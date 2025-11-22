@@ -88,6 +88,16 @@ type CommunityReview struct {
 	CreatedAt  pgtype.Timestamptz `json:"created_at"`
 }
 
+type EnterpriseAuditLog struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	ActorID     pgtype.UUID        `json:"actor_id"`
+	Action      string             `json:"action"`
+	Resource    string             `json:"resource"`
+	DetailsJson []byte             `json:"details_json"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
 type FederationIndex struct {
 	ID             pgtype.UUID        `json:"id"`
 	TenantID       pgtype.UUID        `json:"tenant_id"`
@@ -246,6 +256,26 @@ type Recommendation struct {
 	Score       float64            `json:"score"`
 	ContextJson []byte             `json:"context_json"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type ScimDirectory struct {
+	ID        pgtype.UUID        `json:"id"`
+	TenantID  pgtype.UUID        `json:"tenant_id"`
+	Token     string             `json:"token"`
+	Enabled   bool               `json:"enabled"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type SsoProvider struct {
+	ID           pgtype.UUID        `json:"id"`
+	TenantID     pgtype.UUID        `json:"tenant_id"`
+	Type         string             `json:"type"`
+	Domain       string             `json:"domain"`
+	MetadataUrl  pgtype.Text        `json:"metadata_url"`
+	ClientID     pgtype.Text        `json:"client_id"`
+	ClientSecret pgtype.Text        `json:"client_secret"`
+	Enabled      bool               `json:"enabled"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 type Subscription struct {
