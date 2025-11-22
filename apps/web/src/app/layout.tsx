@@ -6,8 +6,8 @@ import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PanaDirectory",
-  description: "Directory Listing Site Builder",
+  title: "PanaList",
+  description: "Build beautiful directories. Automate everything.",
 };
 
 export default function RootLayout({
