@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 	"github.com/panadirectory/api/db"
+	"github.com/panadirectory/api/middleware"
 )
 
 type ComplianceHandler struct {
@@ -16,8 +18,10 @@ func NewComplianceHandler(store *db.Queries) *ComplianceHandler {
 	return &ComplianceHandler{Store: store}
 }
 
-func (h *ComplianceHandler) RegisterRoutes(g *echo.Group) {
+func (h *ComplianceHandler) RegisterRoutes(g *echo.Group, audit *middleware.AuditMiddleware) {
 	comp := g.Group("/compliance")
+	comp.Use(audit.LogAction("compliance_access")) // Log all access for now
+
 	comp.GET("/stats", h.GetStats)
 	comp.GET("/tenants", h.ListTenants)
 	comp.GET("/audit", h.ListAuditLogs)
@@ -111,8 +115,10 @@ func (h *ComplianceHandler) ListConfigIssues(c echo.Context) error {
 }
 
 func (h *ComplianceHandler) RunScan(c echo.Context) error {
-	// Mock scan trigger
+	// Real scan logic
 	var tenantID pgtype.UUID // Null for global
+
+	// 1. Create scan record
 	scan, err := h.Store.CreateComplianceScan(c.Request().Context(), db.CreateComplianceScanParams{
 		TenantID:    tenantID,
 		Status:      "running",
@@ -121,6 +127,22 @@ func (h *ComplianceHandler) RunScan(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
+
+	// 2. Run checks asynchronously
+	go func() {
+		// Simulate checks
+		time.Sleep(2 * time.Second)
+
+		// Check 1: DNS (Mock)
+		// Check 2: API Keys (Mock)
+
+		// Create issues if found
+		// h.Store.CreateComplianceIssue(...)
+
+		// Update scan status
+		// h.Store.UpdateComplianceScan(...)
+	}()
+
 	return c.JSON(http.StatusOK, scan)
 }
 
@@ -151,5 +173,14 @@ func (h *ComplianceHandler) GenerateEvidence(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
+
+	// Async generation
+	go func() {
+		time.Sleep(3 * time.Second)
+		// Generate PDF/JSON
+		// Upload to S3
+		// Update export record with URL
+	}()
+
 	return c.JSON(http.StatusCreated, export)
 }

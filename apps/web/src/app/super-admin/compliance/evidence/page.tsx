@@ -18,7 +18,7 @@ export default function EvidencePage() {
     const fetchExports = async () => {
         try {
             const res = await api.get("/compliance/evidence");
-            setExports(res.data);
+            setExports(res.data || []);
         } catch (err) {
             console.error(err);
         }

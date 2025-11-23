@@ -78,7 +78,7 @@ func (q *Queries) GetSSOProvider(ctx context.Context, tenantID pgtype.UUID) (Sso
 }
 
 const listEnterpriseAuditLogs = `-- name: ListEnterpriseAuditLogs :many
-SELECT id, tenant_id, actor_id, action, resource, details_json, created_at FROM enterprise_audit_logs
+SELECT id, tenant_id, actor_id, action, resource, details_json, created_at, ip, user_agent FROM enterprise_audit_logs
 WHERE tenant_id = $1
 ORDER BY created_at DESC
 LIMIT 100
@@ -101,6 +101,8 @@ func (q *Queries) ListEnterpriseAuditLogs(ctx context.Context, tenantID pgtype.U
 			&i.Resource,
 			&i.DetailsJson,
 			&i.CreatedAt,
+			&i.Ip,
+			&i.UserAgent,
 		); err != nil {
 			return nil, err
 		}

@@ -5,6 +5,8 @@
 package db
 
 import (
+	"net/netip"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -117,6 +119,8 @@ type EnterpriseAuditLog struct {
 	Resource    string             `json:"resource"`
 	DetailsJson []byte             `json:"details_json"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	Ip          *netip.Addr        `json:"ip"`
+	UserAgent   pgtype.Text        `json:"user_agent"`
 }
 
 type EvidenceExport struct {
@@ -268,17 +272,22 @@ type Plan struct {
 }
 
 type Post struct {
-	ID          pgtype.UUID        `json:"id"`
-	TenantID    pgtype.UUID        `json:"tenant_id"`
-	Title       string             `json:"title"`
-	Slug        string             `json:"slug"`
-	ContentJson []byte             `json:"content_json"`
-	Excerpt     pgtype.Text        `json:"excerpt"`
-	Status      pgtype.Text        `json:"status"`
-	PublishedAt pgtype.Timestamptz `json:"published_at"`
-	AuthorID    pgtype.UUID        `json:"author_id"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	ID              pgtype.UUID        `json:"id"`
+	TenantID        pgtype.UUID        `json:"tenant_id"`
+	Title           string             `json:"title"`
+	Slug            string             `json:"slug"`
+	ContentJson     []byte             `json:"content_json"`
+	Excerpt         pgtype.Text        `json:"excerpt"`
+	Status          pgtype.Text        `json:"status"`
+	PublishedAt     pgtype.Timestamptz `json:"published_at"`
+	AuthorID        pgtype.UUID        `json:"author_id"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
+	Sector          pgtype.Text        `json:"sector"`
+	Tags            []string           `json:"tags"`
+	MetaDescription pgtype.Text        `json:"meta_description"`
+	CustomMetaTags  pgtype.Text        `json:"custom_meta_tags"`
+	OgImageUrl      pgtype.Text        `json:"og_image_url"`
 }
 
 type RbacPermission struct {
@@ -312,6 +321,28 @@ type ScimDirectory struct {
 	Token     string             `json:"token"`
 	Enabled   bool               `json:"enabled"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type SeoHealthSnapshot struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Score       pgtype.Int4        `json:"score"`
+	DetailsJson []byte             `json:"details_json"`
+	CapturedAt  pgtype.Timestamptz `json:"captured_at"`
+}
+
+type SeoTopicCluster struct {
+	ID             pgtype.UUID        `json:"id"`
+	TenantID       pgtype.UUID        `json:"tenant_id"`
+	Slug           string             `json:"slug"`
+	Type           string             `json:"type"`
+	Title          string             `json:"title"`
+	TargetKeywords []string           `json:"target_keywords"`
+	ParentHubID    pgtype.UUID        `json:"parent_hub_id"`
+	Status         string             `json:"status"`
+	MetadataJson   []byte             `json:"metadata_json"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
 }
 
 type SsoProvider struct {
@@ -354,6 +385,19 @@ type TenantInstall struct {
 	Version   pgtype.Text        `json:"version"`
 	Status    pgtype.Text        `json:"status"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type TenantSeoSetting struct {
+	ID                     pgtype.UUID        `json:"id"`
+	TenantID               pgtype.UUID        `json:"tenant_id"`
+	SiteTitlePattern       pgtype.Text        `json:"site_title_pattern"`
+	MetaDescriptionPattern pgtype.Text        `json:"meta_description_pattern"`
+	DefaultOgImageUrl      pgtype.Text        `json:"default_og_image_url"`
+	CanonicalBaseUrl       pgtype.Text        `json:"canonical_base_url"`
+	RobotsDirectivesJson   []byte             `json:"robots_directives_json"`
+	NoindexSectionsJson    []byte             `json:"noindex_sections_json"`
+	SchemaProfile          pgtype.Text        `json:"schema_profile"`
+	UpdatedAt              pgtype.Timestamptz `json:"updated_at"`
 }
 
 type ThemesMarket struct {

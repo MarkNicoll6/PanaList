@@ -18,7 +18,7 @@ export default function ConfigScannerPage() {
     const fetchIssues = async () => {
         try {
             const res = await api.get("/compliance/config");
-            setIssues(res.data);
+            setIssues(res.data || []);
         } catch (err) {
             console.error(err);
         }

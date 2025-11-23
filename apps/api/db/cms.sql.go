@@ -91,7 +91,7 @@ INSERT INTO posts (
   tenant_id, title, slug, content_json, excerpt, status, published_at, author_id
 ) VALUES (
   $1, $2, $3, $4, $5, $6, $7, $8
-) RETURNING id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at
+) RETURNING id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at, sector, tags, meta_description, custom_meta_tags, og_image_url
 `
 
 type CreatePostParams struct {
@@ -129,12 +129,17 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, e
 		&i.AuthorID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Sector,
+		&i.Tags,
+		&i.MetaDescription,
+		&i.CustomMetaTags,
+		&i.OgImageUrl,
 	)
 	return i, err
 }
 
 const getPost = `-- name: GetPost :one
-SELECT id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at FROM posts
+SELECT id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at, sector, tags, meta_description, custom_meta_tags, og_image_url FROM posts
 WHERE id = $1 AND tenant_id = $2 LIMIT 1
 `
 
@@ -158,6 +163,11 @@ func (q *Queries) GetPost(ctx context.Context, arg GetPostParams) (Post, error) 
 		&i.AuthorID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Sector,
+		&i.Tags,
+		&i.MetaDescription,
+		&i.CustomMetaTags,
+		&i.OgImageUrl,
 	)
 	return i, err
 }
@@ -232,7 +242,7 @@ func (q *Queries) ListPages(ctx context.Context, tenantID pgtype.UUID) ([]Page, 
 }
 
 const listPosts = `-- name: ListPosts :many
-SELECT id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at FROM posts
+SELECT id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at, sector, tags, meta_description, custom_meta_tags, og_image_url FROM posts
 WHERE tenant_id = $1
 ORDER BY created_at DESC
 `
@@ -258,6 +268,11 @@ func (q *Queries) ListPosts(ctx context.Context, tenantID pgtype.UUID) ([]Post, 
 			&i.AuthorID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Sector,
+			&i.Tags,
+			&i.MetaDescription,
+			&i.CustomMetaTags,
+			&i.OgImageUrl,
 		); err != nil {
 			return nil, err
 		}
@@ -273,7 +288,7 @@ const updatePost = `-- name: UpdatePost :one
 UPDATE posts
 SET title = $3, slug = $4, content_json = $5, excerpt = $6, status = $7, published_at = $8, updated_at = NOW()
 WHERE id = $1 AND tenant_id = $2
-RETURNING id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at
+RETURNING id, tenant_id, title, slug, content_json, excerpt, status, published_at, author_id, created_at, updated_at, sector, tags, meta_description, custom_meta_tags, og_image_url
 `
 
 type UpdatePostParams struct {
@@ -311,6 +326,11 @@ func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) (Post, e
 		&i.AuthorID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Sector,
+		&i.Tags,
+		&i.MetaDescription,
+		&i.CustomMetaTags,
+		&i.OgImageUrl,
 	)
 	return i, err
 }

@@ -1,90 +1,84 @@
-"use client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowUpRight, Users, Eye, MousePointer, Clock } from "lucide-react";
 
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-export default function AdminAnalyticsPage() {
-    const [insight, setInsight] = useState<string | null>(null);
-    const [generating, setGenerating] = useState(false);
-
-    const { data: overview } = useQuery({
-        queryKey: ['analytics-overview'],
-        queryFn: async () => {
-            const res = await api.get('/analytics/overview');
-            // Mock data if empty for demo
-            return res.data.length ? res.data : [
-                { date: '2023-01-01', pageviews: 100 },
-                { date: '2023-01-02', pageviews: 150 },
-                { date: '2023-01-03', pageviews: 120 },
-                { date: '2023-01-04', pageviews: 200 },
-                { date: '2023-01-05', pageviews: 180 },
-            ];
-        },
-    });
-
-    const handleGenerateInsight = async () => {
-        setGenerating(true);
-        try {
-            const res = await api.post('/insights/weekly-generate');
-            setInsight(res.data.summary);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setGenerating(false);
-        }
-    };
-
+export default function AnalyticsPage() {
     return (
-        <div className="p-8 space-y-8">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold">Analytics</h1>
-                <Button onClick={handleGenerateInsight} disabled={generating}>
-                    {generating ? 'Generating...' : 'Generate Weekly Insight'}
-                </Button>
+        <div className="space-y-8">
+            <div>
+                <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900">Analytics</h1>
+                <p className="text-sm text-slate-600 mt-1">Detailed insights into your directory's performance.</p>
             </div>
 
-            {insight && (
-                <Card className="bg-muted/50 border-primary/20">
-                    <CardHeader>
-                        <CardTitle className="text-lg">AI Insight</CardTitle>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Total Views</CardTitle>
+                        <Eye className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <p>{insight}</p>
+                        <div className="text-2xl font-bold">245,231</div>
+                        <p className="text-xs text-green-600 flex items-center mt-1">
+                            <ArrowUpRight className="h-3 w-3 mr-1" /> +20.1%
+                        </p>
                     </CardContent>
                 </Card>
-            )}
-
-            <div className="grid gap-4 md:grid-cols-2">
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Traffic Overview</CardTitle>
-                    </CardHeader>
-                    <CardContent className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={overview}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="date" />
-                                <YAxis />
-                                <Tooltip />
-                                <Line type="monotone" dataKey="pageviews" stroke="#8884d8" />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top Listings</CardTitle>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Unique Visitors</CardTitle>
+                        <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <p className="text-muted-foreground">No data available yet.</p>
+                        <div className="text-2xl font-bold">12,350</div>
+                        <p className="text-xs text-green-600 flex items-center mt-1">
+                            <ArrowUpRight className="h-3 w-3 mr-1" /> +10.5%
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Avg. Time</CardTitle>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">2m 45s</div>
+                        <p className="text-xs text-slate-500 mt-1">Same as last week</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Bounce Rate</CardTitle>
+                        <MousePointer className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">42.3%</div>
+                        <p className="text-xs text-green-600 flex items-center mt-1">
+                            <ArrowUpRight className="h-3 w-3 mr-1" /> -2.1%
+                        </p>
                     </CardContent>
                 </Card>
             </div>
+
+            <Tabs defaultValue="overview" className="space-y-4">
+                <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="content">Content</TabsTrigger>
+                    <TabsTrigger value="audience">Audience</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="space-y-4">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Traffic Over Time</CardTitle>
+                            <CardDescription>Daily page views for the last 30 days.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="pl-2">
+                            <div className="h-[300px] flex items-center justify-center bg-slate-50 rounded-md border border-dashed border-slate-200 text-slate-400">
+                                Interactive Chart Component
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

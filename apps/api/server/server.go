@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/panadirectory/api/db"
 	"github.com/panadirectory/api/handlers"
+	myMiddleware "github.com/panadirectory/api/middleware"
 )
 
 type Server struct {
@@ -92,9 +93,23 @@ func (s *Server) setupRoutes() {
 	enterpriseHandler.RegisterRoutes(v3Group)
 
 	complianceHandler := handlers.NewComplianceHandler(s.Store)
-	complianceHandler.RegisterRoutes(v3Group)
+	auditMiddleware := myMiddleware.NewAuditMiddleware(s.Store)
+	// rbacMiddleware := myMiddleware.NewRBACMiddleware(s.Store)
+
+	// Apply audit logging to compliance routes
+	// In a real app we'd wrap specific routes or groups
+	complianceHandler.RegisterRoutes(v3Group, auditMiddleware)
 
 	v1Group := s.Router.Group("/api/v1")
 	onboardingHandler := handlers.NewOnboardingHandler(s.Store)
 	onboardingHandler.RegisterRoutes(v1Group)
+
+	seoHandler := handlers.NewSEOHandler(s.Store)
+	adminGroup := s.Router.Group("/api/v3/admin") // Create admin group if not exists, or reuse v3
+	seoHandler.RegisterRoutes(adminGroup)
+	seoHandler.RegisterPublicRoutes(v3Group)
+
+	blogHandler := handlers.NewBlogHandler(s.Store)
+	blogHandler.RegisterRoutes(adminGroup)
+	blogHandler.RegisterPublicRoutes(v3Group)
 }

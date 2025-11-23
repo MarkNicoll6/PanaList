@@ -2,42 +2,72 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Building2, FileClock, ShieldCheck, Radar, Archive, Settings2, Bell, User, Globe, Network, Activity } from "lucide-react";
+import {
+    LayoutDashboard,
+    FileText,
+    BarChart3,
+    Megaphone,
+    UserCheck,
+    Store,
+    Code2,
+    Globe2,
+    CreditCard,
+    Shield,
+    Settings,
+    Bell,
+    User,
+    Search,
+    MapPin,
+    Star,
+    Sparkles,
+    Palette,
+    Layout,
+    Users
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import HelperPanel from "@/components/onboarding/HelperPanel";
+import { Input } from "@/components/ui/input";
 
-export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     const navItems = [
         {
             section: "Overview", items: [
-                { id: "dashboard", icon: LayoutDashboard, label: "Compliance overview", href: "/super-admin/compliance" }
+                { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", href: "/admin" }
             ]
         },
         {
-            section: "Tenants", items: [
-                { id: "tenants", icon: Building2, label: "Tenant list", href: "/super-admin/compliance/tenants" }
+            section: "Directory", items: [
+                { id: "listings", icon: Store, label: "Listings", href: "/admin/listings" },
+                { id: "categories", icon: FileText, label: "Categories", href: "/admin/categories" },
+                { id: "locations", icon: MapPin, label: "Locations", href: "/admin/locations" },
+                { id: "reviews", icon: Star, label: "Reviews", href: "/admin/reviews" },
             ]
         },
         {
-            section: "Controls", items: [
-                { id: "audit", icon: FileClock, label: "Audit logs", href: "/super-admin/compliance/audit" },
-                { id: "rbac", icon: ShieldCheck, label: "Roles & access", href: "/super-admin/compliance/rbac" },
-                { id: "config", icon: Radar, label: "Config scanner", href: "/super-admin/compliance/config" },
-                { id: "evidence", icon: Archive, label: "Evidence exports", href: "/super-admin/compliance/evidence" }
+            section: "AI Engine", items: [
+                { id: "ingestion", icon: Search, label: "Data Ingestion", href: "/admin/ingestion" },
+                { id: "cleaning", icon: Sparkles, label: "Data Cleaning", href: "/admin/cleaning" },
+                { id: "posts", icon: FileText, label: "Auto-Blog", href: "/admin/posts" },
             ]
         },
         {
-            section: "SEO & Discovery", items: [
-                { id: "seo-health", icon: Activity, label: "SEO Health", href: "/super-admin/seo/health" },
-                { id: "seo-settings", icon: Globe, label: "SEO Settings", href: "/super-admin/seo/settings" },
-                { id: "seo-clusters", icon: Network, label: "Topic Clusters", href: "/super-admin/seo/clusters" }
+            section: "Design", items: [
+                { id: "themes", icon: Palette, label: "Themes", href: "/admin/themes" },
+                { id: "pages", icon: Layout, label: "Pages", href: "/admin/pages" },
             ]
         },
         {
-            section: "System", items: [
-                { id: "settings", icon: Settings2, label: "System settings", href: "/super-admin/settings" }
+            section: "Growth", items: [
+                { id: "analytics", icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
+                { id: "ads", icon: Megaphone, label: "Monetisation", href: "/admin/ads" },
+                { id: "users", icon: Users, label: "Users", href: "/admin/users" },
+            ]
+        },
+        {
+            section: "Settings", items: [
+                { id: "settings", icon: Settings, label: "Settings", href: "/admin/settings" },
+                { id: "developers", icon: Code2, label: "Developers", href: "/admin/developers" },
             ]
         }
     ];
@@ -48,9 +78,8 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
             <aside className="w-[260px] border-r border-slate-200 bg-white flex flex-col fixed h-full z-10">
                 <div className="h-14 flex items-center px-4 border-b border-slate-100">
                     <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">PL</div>
-                        <span className="font-semibold text-slate-900">PanaList</span>
-                        <span className="text-[10px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Super Admin</span>
+                        <div className="h-6 w-6 rounded-md bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">T</div>
+                        <span className="font-semibold text-slate-900">Tenant Admin</span>
                     </div>
                 </div>
 
@@ -62,7 +91,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
                             </h3>
                             <div className="space-y-0.5">
                                 {section.items.map((item) => {
-                                    const isActive = pathname === item.href;
+                                    const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                                     return (
                                         <Link
                                             key={item.id}
@@ -88,8 +117,8 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
                             <User className="h-4 w-4 text-slate-500" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">Super Admin</p>
-                            <p className="text-xs text-slate-500 truncate">admin@panalist.com</p>
+                            <p className="text-sm font-medium text-slate-900 truncate">Tenant User</p>
+                            <p className="text-xs text-slate-500 truncate">user@tenant.com</p>
                         </div>
                     </div>
                 </div>
@@ -99,13 +128,17 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
             <main className="flex-1 ml-[260px] flex flex-col min-h-screen">
                 {/* Top Nav */}
                 <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10">
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                        <span>Super Admin</span>
-                        <span>/</span>
-                        <span className="font-medium text-slate-900">Compliance</span>
+                    <div className="flex items-center gap-4 w-full max-w-md">
+                        <div className="relative w-full">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                            <Input
+                                type="search"
+                                placeholder="Search..."
+                                className="w-full pl-9 bg-slate-50 border-slate-200 focus-visible:ring-indigo-500"
+                            />
+                        </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <HelperPanel />
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500">
                             <Bell className="h-4 w-4" />
                         </Button>
