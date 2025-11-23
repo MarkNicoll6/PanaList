@@ -90,4 +90,7 @@ func (s *Server) setupRoutes() {
 
 	enterpriseHandler := handlers.NewEnterpriseHandler(s.Store)
 	enterpriseHandler.RegisterRoutes(v3Group)
+
+	complianceHandler := handlers.NewComplianceHandler(s.Store)
+	complianceHandler.RegisterRoutes(v3Group)
 }

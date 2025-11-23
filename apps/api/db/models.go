@@ -88,6 +88,27 @@ type CommunityReview struct {
 	CreatedAt  pgtype.Timestamptz `json:"created_at"`
 }
 
+type ComplianceIssue struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	ScanID      pgtype.UUID        `json:"scan_id"`
+	Category    string             `json:"category"`
+	Severity    string             `json:"severity"`
+	Description string             `json:"description"`
+	Status      string             `json:"status"`
+	DetectedAt  pgtype.Timestamptz `json:"detected_at"`
+	ResolvedAt  pgtype.Timestamptz `json:"resolved_at"`
+}
+
+type ComplianceScan struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Status      string             `json:"status"`
+	SummaryJson []byte             `json:"summary_json"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	CompletedAt pgtype.Timestamptz `json:"completed_at"`
+}
+
 type EnterpriseAuditLog struct {
 	ID          pgtype.UUID        `json:"id"`
 	TenantID    pgtype.UUID        `json:"tenant_id"`
@@ -95,6 +116,17 @@ type EnterpriseAuditLog struct {
 	Action      string             `json:"action"`
 	Resource    string             `json:"resource"`
 	DetailsJson []byte             `json:"details_json"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type EvidenceExport struct {
+	ID          pgtype.UUID        `json:"id"`
+	TenantID    pgtype.UUID        `json:"tenant_id"`
+	Template    string             `json:"template"`
+	Format      string             `json:"format"`
+	Status      string             `json:"status"`
+	DownloadUrl pgtype.Text        `json:"download_url"`
+	CreatedBy   pgtype.UUID        `json:"created_by"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
@@ -247,6 +279,22 @@ type Post struct {
 	AuthorID    pgtype.UUID        `json:"author_id"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type RbacPermission struct {
+	ID        pgtype.UUID        `json:"id"`
+	RoleID    pgtype.UUID        `json:"role_id"`
+	Resource  string             `json:"resource"`
+	Action    string             `json:"action"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type RbacRole struct {
+	ID          pgtype.UUID        `json:"id"`
+	Name        string             `json:"name"`
+	Description pgtype.Text        `json:"description"`
+	IsSystem    bool               `json:"is_system"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
 type Recommendation struct {
