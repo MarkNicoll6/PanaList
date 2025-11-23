@@ -65,7 +65,9 @@ export default function ThemesPage() {
                         </div>
                     </CardContent>
                     <CardFooter className="gap-2">
-                        <Button className="w-full" variant="secondary">Customize</Button>
+                        <Link href="/admin/design/editor?theme=techno" className="w-full">
+                            <Button className="w-full" variant="secondary">Customize</Button>
+                        </Link>
                         <Button variant="outline" size="icon">
                             <MousePointer2 className="h-4 w-4" />
                         </Button>

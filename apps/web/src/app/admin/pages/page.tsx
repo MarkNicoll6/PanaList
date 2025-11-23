@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, MoreHorizontal, FileText, Globe, Eye } from "lucide-react";
+import { Plus, Search, MoreHorizontal, FileText, Eye } from "lucide-react";
 import Link from "next/link";
 
 export default function PagesPage() {
@@ -43,115 +43,53 @@ export default function PagesPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                            <FileText className="h-5 w-5" />
+                            {[
+                                { title: "About Us", slug: "about", updated: "2 days ago", status: "published" },
+                                { title: "Contact", slug: "contact", updated: "1 week ago", status: "published" },
+                                { title: "Privacy Policy", slug: "privacy", updated: "1 month ago", status: "published" },
+                                { title: "Terms of Service", slug: "terms", updated: "1 month ago", status: "draft" },
+                            ].map((page) => (
+                                <TableRow key={page.slug} className="group cursor-pointer hover:bg-slate-50">
+                                    <TableCell className="font-medium">
+                                        <Link href={`/admin/pages/${page.slug}`} className="flex items-center gap-3 w-full">
+                                            <div className="h-10 w-10 rounded bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+                                                <FileText className="h-5 w-5" />
+                                            </div>
+                                            <div>
+                                                <div className="font-semibold text-slate-900">{page.title}</div>
+                                                {page.slug === "about" && <div className="text-xs text-slate-500">System Page</div>}
+                                            </div>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell className="font-mono text-xs text-slate-500">/{page.slug}</TableCell>
+                                    <TableCell>{page.updated}</TableCell>
+                                    <TableCell>
+                                        <Badge
+                                            className={
+                                                page.status === "published"
+                                                    ? "bg-green-100 text-green-700 hover:bg-green-100"
+                                                    : "bg-slate-100 text-slate-700 hover:bg-slate-100"
+                                            }
+                                        >
+                                            {page.status === "published" ? "Published" : "Draft"}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex justify-end gap-2">
+                                            <Link href={`/${page.slug}`} target="_blank">
+                                                <Button variant="ghost" size="icon">
+                                                    <Eye className="h-4 w-4 text-slate-400" />
+                                                </Button>
+                                            </Link>
+                                            <Link href={`/admin/pages/${page.slug}`}>
+                                                <Button variant="ghost" size="icon">
+                                                    <MoreHorizontal className="h-4 w-4 text-slate-400" />
+                                                </Button>
+                                            </Link>
                                         </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-900">About Us</div>
-                                            <div className="text-xs text-slate-500">System Page</div>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-mono text-xs text-slate-500">/about</TableCell>
-                                <TableCell>2 days ago</TableCell>
-                                <TableCell>
-                                    <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Published</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button variant="ghost" size="icon">
-                                            <Eye className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded bg-slate-50 flex items-center justify-center text-slate-400">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-900">Contact</div>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-mono text-xs text-slate-500">/contact</TableCell>
-                                <TableCell>1 week ago</TableCell>
-                                <TableCell>
-                                    <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Published</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button variant="ghost" size="icon">
-                                            <Eye className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded bg-slate-50 flex items-center justify-center text-slate-400">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-900">Privacy Policy</div>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-mono text-xs text-slate-500">/privacy</TableCell>
-                                <TableCell>1 month ago</TableCell>
-                                <TableCell>
-                                    <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Published</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button variant="ghost" size="icon">
-                                            <Eye className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded bg-slate-50 flex items-center justify-center text-slate-400">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-900">Terms of Service</div>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-mono text-xs text-slate-500">/terms</TableCell>
-                                <TableCell>1 month ago</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline" className="text-slate-500 border-slate-200">Draft</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button variant="ghost" size="icon">
-                                            <Eye className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal className="h-4 w-4 text-slate-400" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </CardContent>

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiV3 as api } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search as SearchIcon } from "lucide-react";
+import { Search as SearchIcon, Mic, MicOff } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface SearchResult {
     id: string;
@@ -20,9 +21,17 @@ export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<SearchResult[]>([]);
     const [searching, setSearching] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [speechSupported, setSpeechSupported] = useState(false);
 
-    const handleSearch = async (e: React.FormEvent) => {
-        e.preventDefault();
+    useEffect(() => {
+        if (typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+            setSpeechSupported(true);
+        }
+    }, []);
+
+    const handleSearch = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
         if (!query.trim()) return;
 
         setSearching(true);
@@ -36,6 +45,40 @@ export default function SearchPage() {
         }
     };
 
+    const toggleListening = () => {
+        if (!speechSupported) return;
+
+        if (isListening) {
+            setIsListening(false);
+            return;
+        }
+
+        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+            if (query) {
+                handleSearch();
+            }
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setQuery(transcript);
+        };
+
+        recognition.start();
+    };
+
     return (
         <div className="min-h-screen bg-background p-8">
             <div className="max-w-3xl mx-auto space-y-8">
@@ -46,13 +89,29 @@ export default function SearchPage() {
                     </p>
                 </div>
 
-                <form onSubmit={handleSearch} className="flex gap-2">
-                    <Input
-                        className="h-12 text-lg"
-                        placeholder="Search for anything..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
+                <form onSubmit={handleSearch} className="flex gap-2 relative">
+                    <div className="relative flex-1">
+                        <Input
+                            className="h-12 text-lg pr-12"
+                            placeholder="Search for anything..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                        />
+                        {speechSupported && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className={cn(
+                                    "absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent",
+                                    isListening ? "text-red-500 animate-pulse" : "text-muted-foreground"
+                                )}
+                                onClick={toggleListening}
+                            >
+                                {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                            </Button>
+                        )}
+                    </div>
                     <Button type="submit" size="lg" disabled={searching}>
                         <SearchIcon className="mr-2 h-5 w-5" />
                         {searching ? "Searching..." : "Search"}

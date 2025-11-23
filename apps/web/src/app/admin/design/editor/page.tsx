@@ -10,10 +10,27 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Save, Smartphone, Monitor, Tablet, RotateCcw, Eye } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function DesignEditorPage() {
+function DesignEditorContent() {
+    const searchParams = useSearchParams();
+    const theme = searchParams.get("theme");
     const [activeTab, setActiveTab] = useState("brand");
+    const [viewMode, setViewMode] = useState<"desktop" | "mobile">("desktop");
+
+    // Theme State
+    const [primaryColor, setPrimaryColor] = useState("#4F46E5");
+    const [bgColor, setBgColor] = useState("#F8FAFC");
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        if (theme === "techno") {
+            setPrimaryColor("#8B5CF6"); // Violet
+            setBgColor("#0F172A"); // Slate 900
+            setIsDarkMode(true);
+        }
+    }, [theme]);
 
     return (
         <div className="fixed inset-0 z-50 bg-slate-100 flex flex-col">
@@ -27,16 +44,27 @@ export default function DesignEditorPage() {
                     </Link>
                     <div className="h-6 w-px bg-slate-200" />
                     <span className="font-semibold text-slate-900">Design Editor</span>
+                    {theme && <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded capitalize">{theme} Theme</span>}
                 </div>
 
                 <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-md">
-                    <Button variant="ghost" size="icon" className="h-7 w-7 bg-white shadow-sm">
+                    <Button
+                        variant={viewMode === "desktop" ? "secondary" : "ghost"}
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setViewMode("desktop")}
+                    >
                         <Monitor className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500">
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500" disabled>
                         <Tablet className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500">
+                    <Button
+                        variant={viewMode === "mobile" ? "secondary" : "ghost"}
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setViewMode("mobile")}
+                    >
                         <Smartphone className="h-4 w-4" />
                     </Button>
                 </div>
@@ -71,15 +99,29 @@ export default function DesignEditorPage() {
                                         <div className="space-y-2">
                                             <Label className="text-xs">Primary Color</Label>
                                             <div className="flex gap-2">
-                                                <div className="h-9 w-9 rounded border border-slate-200 bg-indigo-600 shadow-sm cursor-pointer ring-2 ring-offset-2 ring-transparent hover:ring-indigo-200 transition-all"></div>
-                                                <Input defaultValue="#4F46E5" className="font-mono text-xs" />
+                                                <div
+                                                    className="h-9 w-9 rounded border border-slate-200 shadow-sm cursor-pointer ring-2 ring-offset-2 ring-transparent hover:ring-indigo-200 transition-all"
+                                                    style={{ backgroundColor: primaryColor }}
+                                                ></div>
+                                                <Input
+                                                    value={primaryColor}
+                                                    onChange={(e) => setPrimaryColor(e.target.value)}
+                                                    className="font-mono text-xs"
+                                                />
                                             </div>
                                         </div>
                                         <div className="space-y-2">
                                             <Label className="text-xs">Background Color</Label>
                                             <div className="flex gap-2">
-                                                <div className="h-9 w-9 rounded border border-slate-200 bg-slate-50 shadow-sm cursor-pointer"></div>
-                                                <Input defaultValue="#F8FAFC" className="font-mono text-xs" />
+                                                <div
+                                                    className="h-9 w-9 rounded border border-slate-200 shadow-sm cursor-pointer"
+                                                    style={{ backgroundColor: bgColor }}
+                                                ></div>
+                                                <Input
+                                                    value={bgColor}
+                                                    onChange={(e) => setBgColor(e.target.value)}
+                                                    className="font-mono text-xs"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +229,10 @@ export default function DesignEditorPage() {
 
                 {/* Preview Area */}
                 <main className="flex-1 bg-slate-100 p-8 flex items-center justify-center overflow-auto">
-                    <div className="w-full max-w-5xl h-full bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col border border-slate-200 transform scale-[0.95] origin-top">
+                    <div
+                        className={`h-full bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col border border-slate-200 transform origin-top transition-all duration-300 ${viewMode === "mobile" ? "w-[375px]" : "w-full max-w-5xl scale-[0.95]"
+                            }`}
+                    >
                         {/* Mock Browser Header */}
                         <div className="h-8 bg-slate-50 border-b border-slate-200 flex items-center px-3 gap-2">
                             <div className="flex gap-1.5">
@@ -203,39 +248,88 @@ export default function DesignEditorPage() {
                         </div>
 
                         {/* Mock Content Preview */}
-                        <div className="flex-1 overflow-y-auto bg-slate-50">
+                        <div
+                            className="flex-1 overflow-y-auto transition-colors duration-300"
+                            style={{ backgroundColor: isDarkMode ? bgColor : '#F8FAFC' }}
+                        >
                             {/* Navbar */}
-                            <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8">
-                                <div className="font-bold text-xl text-indigo-600">PanaList</div>
-                                <div className="flex gap-6 text-sm font-medium text-slate-600">
+                            <div
+                                className={`h-16 border-b flex items-center justify-between px-8 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}
+                            >
+                                <div className="font-bold text-xl" style={{ color: primaryColor }}>PanaList</div>
+                                <div className={`flex gap-6 text-sm font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                                     <span>Explore</span>
                                     <span>Categories</span>
                                     <span>About</span>
-                                    <span className="text-indigo-600">Sign In</span>
+                                    <span style={{ color: primaryColor }}>Sign In</span>
                                 </div>
                             </div>
 
                             {/* Hero */}
-                            <div className="bg-indigo-600 text-white py-20 px-8 text-center">
+                            <div className="py-20 px-8 text-center" style={{ backgroundColor: isDarkMode ? '#1E293B' : primaryColor, color: 'white' }}>
                                 <h1 className="text-4xl font-bold mb-4">Discover Amazing Places</h1>
-                                <p className="text-indigo-100 max-w-xl mx-auto mb-8">Find the best local businesses, services, and events in your area. Curated by experts.</p>
+                                <p className="opacity-90 max-w-xl mx-auto mb-8">Find the best local businesses, services, and events in your area. Curated by experts.</p>
                                 <div className="max-w-md mx-auto bg-white rounded-lg p-2 flex gap-2">
-                                    <input className="flex-1 px-4 text-slate-900 outline-none" placeholder="What are you looking for?" />
-                                    <button className="bg-indigo-600 text-white px-6 py-2 rounded font-medium">Search</button>
+                                    <input className="flex-1 px-4 text-slate-900 outline-none bg-transparent" placeholder="What are you looking for?" />
+                                    <button
+                                        className="text-white px-6 py-2 rounded font-medium transition-opacity hover:opacity-90"
+                                        style={{ backgroundColor: isDarkMode ? primaryColor : '#0F172A' }}
+                                    >
+                                        Search
+                                    </button>
                                 </div>
                             </div>
 
                             {/* Categories */}
                             <div className="py-16 px-8 max-w-6xl mx-auto">
-                                <h2 className="text-2xl font-bold text-slate-900 mb-8">Browse Categories</h2>
+                                <h2 className={`text-2xl font-bold mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Browse Categories</h2>
                                 <div className="grid grid-cols-4 gap-6">
                                     {[1, 2, 3, 4].map((i) => (
-                                        <div key={i} className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer">
-                                            <div className="h-10 w-10 bg-indigo-50 rounded-lg mb-4"></div>
-                                            <div className="font-semibold text-slate-900">Category {i}</div>
-                                            <div className="text-sm text-slate-500 mt-1">120 Listings</div>
+                                        <div
+                                            key={i}
+                                            className={`p-6 rounded-lg shadow-sm border transition-shadow cursor-pointer hover:shadow-md ${isDarkMode
+                                                ? 'bg-slate-800 border-slate-700 hover:border-slate-600'
+                                                : 'bg-white border-slate-200'
+                                                }`}
+                                        >
+                                            <div
+                                                className="h-10 w-10 rounded-lg mb-4 flex items-center justify-center"
+                                                style={{ backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#F1F5F9' }}
+                                            >
+                                                <div className="h-5 w-5 rounded-full" style={{ backgroundColor: primaryColor }}></div>
+                                            </div>
+                                            <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Category {i}</div>
+                                            <div className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>120 Listings</div>
                                         </div>
                                     ))}
+                                </div>
+                            </div>
+                            {/* Footer */}
+                            <div className={`py-12 px-8 border-t ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
+                                <div className="grid grid-cols-4 gap-8 mb-8">
+                                    <div className="col-span-2">
+                                        <div className="font-bold text-xl mb-4" style={{ color: primaryColor }}>PanaList</div>
+                                        <p className="text-sm max-w-xs">The best place to find local businesses and services. Trusted by thousands of users.</p>
+                                    </div>
+                                    <div>
+                                        <h4 className={`font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Company</h4>
+                                        <ul className="space-y-2 text-sm">
+                                            <li>About Us</li>
+                                            <li>Careers</li>
+                                            <li>Contact</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 className={`font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Legal</h4>
+                                        <ul className="space-y-2 text-sm">
+                                            <li>Privacy Policy</li>
+                                            <li>Terms of Service</li>
+                                            <li>Cookie Policy</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="text-xs text-center pt-8 border-t border-slate-200/10">
+                                    © 2024 PanaList Directory. All rights reserved.
                                 </div>
                             </div>
                         </div>
@@ -243,5 +337,13 @@ export default function DesignEditorPage() {
                 </main>
             </div>
         </div>
+    );
+}
+
+export default function DesignEditorPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DesignEditorContent />
+        </Suspense>
     );
 }
