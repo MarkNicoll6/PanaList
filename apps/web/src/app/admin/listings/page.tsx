@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Filter, MoreHorizontal, MapPin, Globe } from "lucide-react";
+import { Plus, Search, Filter, MoreHorizontal, MapPin, Globe, Store } from "lucide-react";
 import Link from "next/link";
 
 export default function ListingsPage() {
@@ -20,9 +20,11 @@ export default function ListingsPage() {
                     <Button variant="outline">
                         <Filter className="mr-2 h-4 w-4" /> Filter
                     </Button>
-                    <Button>
-                        <Plus className="mr-2 h-4 w-4" /> Add Listing
-                    </Button>
+                    <Link href="/admin/listings/new">
+                        <Button>
+                            <Plus className="mr-2 h-4 w-4" /> Add Listing
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
