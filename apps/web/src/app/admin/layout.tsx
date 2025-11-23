@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import AdminHelperPanel from "@/components/admin/AdminHelperPanel";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -169,6 +170,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
+                            <AdminHelperPanel />
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500">
                                 <Bell className="h-4 w-4" />
                             </Button>
