@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Palette, Layout, Check, Map, Type, MousePointer2 } from "lucide-react";
+import Link from "next/link";
 
 export default function ThemesPage() {
     return (
@@ -13,9 +14,11 @@ export default function ThemesPage() {
                     <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900">Themes</h1>
                     <p className="text-sm text-slate-600 mt-1">Select a starting point for your directory. You can customize everything later.</p>
                 </div>
-                <Button variant="outline">
-                    <Palette className="mr-2 h-4 w-4" /> Open Design Editor
-                </Button>
+                <Link href="/admin/design/editor">
+                    <Button variant="outline">
+                        <Palette className="mr-2 h-4 w-4" /> Open Design Editor
+                    </Button>
+                </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
