@@ -27,3 +27,15 @@ apiV3.interceptors.request.use((config) => {
     }
     return config;
 });
+
+export const apiV1 = axios.create({
+    baseURL: 'http://localhost:8080/api/v1',
+});
+
+apiV1.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});

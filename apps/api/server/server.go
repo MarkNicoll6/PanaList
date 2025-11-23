@@ -93,4 +93,8 @@ func (s *Server) setupRoutes() {
 
 	complianceHandler := handlers.NewComplianceHandler(s.Store)
 	complianceHandler.RegisterRoutes(v3Group)
+
+	v1Group := s.Router.Group("/api/v1")
+	onboardingHandler := handlers.NewOnboardingHandler(s.Store)
+	onboardingHandler.RegisterRoutes(v1Group)
 }

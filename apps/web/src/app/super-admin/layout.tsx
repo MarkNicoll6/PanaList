@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Building2, FileClock, ShieldCheck, Radar, Archive, Settings2, Bell, HelpCircle, User } from "lucide-react";
+import { LayoutDashboard, Building2, FileClock, ShieldCheck, Radar, Archive, Settings2, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import HelperPanel from "@/components/onboarding/HelperPanel";
 
 export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -60,8 +61,8 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
                                             key={item.id}
                                             href={item.href}
                                             className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
-                                                    ? "bg-slate-100 text-slate-900"
-                                                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                                                ? "bg-slate-100 text-slate-900"
+                                                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                                                 }`}
                                         >
                                             <item.icon className={`h-4 w-4 ${isActive ? "text-slate-900" : "text-slate-400"}`} />
@@ -97,9 +98,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
                         <span className="font-medium text-slate-900">Compliance</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500">
-                            <HelpCircle className="h-4 w-4" />
-                        </Button>
+                        <HelperPanel />
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500">
                             <Bell className="h-4 w-4" />
                         </Button>

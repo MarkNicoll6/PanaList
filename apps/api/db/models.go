@@ -384,6 +384,16 @@ type User struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
+type UserTourState struct {
+	ID            pgtype.UUID        `json:"id"`
+	TenantID      pgtype.UUID        `json:"tenant_id"`
+	UserID        pgtype.UUID        `json:"user_id"`
+	TourID        string             `json:"tour_id"`
+	Status        string             `json:"status"`
+	LastStepIndex int32              `json:"last_step_index"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+}
+
 type WebhookDelivery struct {
 	ID            pgtype.UUID        `json:"id"`
 	TenantID      pgtype.UUID        `json:"tenant_id"`

@@ -53,6 +53,7 @@ type Querier interface {
 	GetTenantByID(ctx context.Context, id pgtype.UUID) (Tenant, error)
 	GetTenantBySlug(ctx context.Context, slug string) (Tenant, error)
 	GetTopListingsByEvents(ctx context.Context, arg GetTopListingsByEventsParams) ([]GetTopListingsByEventsRow, error)
+	GetTourState(ctx context.Context, arg GetTourStateParams) (UserTourState, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	InstallItem(ctx context.Context, arg InstallItemParams) (TenantInstall, error)
 	InstallMarketplaceItem(ctx context.Context, arg InstallMarketplaceItemParams) (MarketplaceInstall, error)
@@ -80,6 +81,7 @@ type Querier interface {
 	ListReviews(ctx context.Context, listingID pgtype.UUID) ([]CommunityReview, error)
 	ListThemes(ctx context.Context) ([]ThemesMarket, error)
 	ListTopTrends(ctx context.Context, tenantID pgtype.UUID) ([]TrendSignal, error)
+	ListTourStates(ctx context.Context, arg ListTourStatesParams) ([]UserTourState, error)
 	ListWebhookEndpoints(ctx context.Context, tenantID pgtype.UUID) ([]WebhookEndpoint, error)
 	LogFederationQuery(ctx context.Context, arg LogFederationQueryParams) error
 	RecordListingEvent(ctx context.Context, arg RecordListingEventParams) (ListingEvent, error)
@@ -92,6 +94,7 @@ type Querier interface {
 	UpsertFederationOptIn(ctx context.Context, arg UpsertFederationOptInParams) (FederationOptin, error)
 	UpsertSCIMDirectory(ctx context.Context, arg UpsertSCIMDirectoryParams) (ScimDirectory, error)
 	UpsertSSOProvider(ctx context.Context, arg UpsertSSOProviderParams) (SsoProvider, error)
+	UpsertTourState(ctx context.Context, arg UpsertTourStateParams) (UserTourState, error)
 }
 
 var _ Querier = (*Queries)(nil)

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, CheckCircle2, AlertTriangle, XCircle, Clock } from "lucide-react";
+import HelperTooltip from "@/components/onboarding/HelperTooltip";
 
 export default function ComplianceDashboard() {
     const [stats, setStats] = useState<any>(null);
@@ -40,7 +41,10 @@ export default function ComplianceDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card>
                     <CardContent className="p-5">
-                        <div className="text-sm font-medium text-slate-500">Tenants monitored</div>
+                        <div className="text-sm font-medium text-slate-500 flex items-center">
+                            Tenants monitored
+                            <HelperTooltip helperId="dashboard.metrics.tenants" />
+                        </div>
                         <div className="mt-2 flex items-baseline gap-2">
                             <span className="text-3xl font-semibold text-slate-900">{stats.tenants_monitored}</span>
                             <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-100">+2 this week</Badge>
@@ -49,7 +53,10 @@ export default function ComplianceDashboard() {
                 </Card>
                 <Card>
                     <CardContent className="p-5">
-                        <div className="text-sm font-medium text-slate-500">Passing controls</div>
+                        <div className="text-sm font-medium text-slate-500 flex items-center">
+                            Passing controls
+                            <HelperTooltip helperId="dashboard.metrics.controls" />
+                        </div>
                         <div className="mt-2 flex items-baseline gap-2">
                             <span className="text-3xl font-semibold text-slate-900">{stats.passing_controls}%</span>
                             <div className="h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
@@ -92,7 +99,10 @@ export default function ComplianceDashboard() {
                             <table className="w-full text-sm text-left">
                                 <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
                                     <tr>
-                                        <th className="px-6 py-3 font-medium">Tenant</th>
+                                        <th className="px-6 py-3 font-medium flex items-center">
+                                            Tenant
+                                            <HelperTooltip helperId="dashboard.table.tenant_row" />
+                                        </th>
                                         <th className="px-6 py-3 font-medium">Status</th>
                                         <th className="px-6 py-3 font-medium">Last Scan</th>
                                         <th className="px-6 py-3 font-medium">Open Issues</th>
