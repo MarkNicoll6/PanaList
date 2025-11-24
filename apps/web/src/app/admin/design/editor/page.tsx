@@ -12,6 +12,7 @@ import { ArrowLeft, Save, Smartphone, Monitor, Tablet, RotateCcw, Eye } from "lu
 import Link from "next/link";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 function DesignEditorContent() {
     const searchParams = useSearchParams();
@@ -31,6 +32,18 @@ function DesignEditorContent() {
             setIsDarkMode(true);
         }
     }, [theme]);
+
+    useEffect(() => {
+        const isNew = searchParams.get("new");
+        if (isNew) {
+            toast("Welcome to your new site!", {
+                description: "This is your visual editor. Make changes here and see them live.",
+                duration: 5000,
+            });
+            // Remove the query param to prevent toast on refresh (optional, but good UX)
+            // For now, we'll keep it simple.
+        }
+    }, [searchParams]);
 
     return (
         <div className="fixed inset-0 z-50 bg-slate-100 flex flex-col">

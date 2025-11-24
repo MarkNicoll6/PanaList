@@ -302,7 +302,9 @@ export default function LandingPage() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-[#0F172A] hover:bg-[#0F172A]/90">Start Free Trial</Button>
+                <Link href="/onboarding" className="w-full">
+                  <Button className="w-full bg-[#0F172A] hover:bg-[#0F172A]/90">Start Free Trial</Button>
+                </Link>
               </CardFooter>
             </Card>
 
