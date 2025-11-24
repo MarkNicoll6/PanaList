@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Check, Play, Menu, X, Layout, Database, TrendingUp, Globe, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { MiniDirectoryPreview } from "@/components/landing/MiniDirectoryPreview";
 
 export default function LandingPage() {
   const features = [
@@ -132,51 +134,8 @@ export default function LandingPage() {
           {/* App Preview Card */}
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-[2.5rem] blur opacity-20"></div>
-            <div className="relative bg-[#020617] rounded-[2rem] p-6 shadow-2xl border border-white/10 text-white aspect-[4/3] flex flex-col overflow-hidden">
-              {/* Mock Header */}
-              <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-[#22C55E]"></div>
-                  <span className="text-sm font-medium text-white/80">Directory preview</span>
-                </div>
-                <div className="text-xs font-mono text-white/40 bg-white/5 px-2 py-1 rounded">
-                  /best-coffee-london
-                </div>
-              </div>
-
-              {/* Mock Content */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="h-8 w-3/4 bg-white/10 rounded-lg animate-pulse"></div>
-                  <div className="h-4 w-1/2 bg-white/5 rounded-lg"></div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-white/5 rounded-xl p-3 space-y-3 border border-white/5">
-                      <div className="aspect-video bg-white/10 rounded-lg"></div>
-                      <div className="h-3 w-3/4 bg-white/10 rounded"></div>
-                      <div className="h-2 w-1/2 bg-white/5 rounded"></div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Floating Action */}
-                <div className="absolute bottom-6 right-6 left-6 bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                      <span className="text-xs">AI</span>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium">Auto-generated blog</div>
-                      <div className="text-xs text-white/60">Just now</div>
-                    </div>
-                  </div>
-                  <Badge variant="secondary" className="bg-[#22C55E]/20 text-[#22C55E] border-0">
-                    Scheduled
-                  </Badge>
-                </div>
-              </div>
+            <div className="relative bg-[#020617] rounded-[2rem] shadow-2xl border border-white/10 text-white aspect-[4/3] flex flex-col overflow-hidden">
+              <MiniDirectoryPreview />
             </div>
           </div>
         </div>
@@ -261,6 +220,122 @@ export default function LandingPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 bg-slate-50 border-b border-[#E5E7EB]">
+        <div className="max-w-6xl mx-auto px-4 space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <span className="text-[#22C55E] font-medium tracking-wide uppercase text-sm">Pricing</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A]">
+              Simple pricing that scales with you.
+            </h2>
+            <p className="text-lg text-[#64748B]">
+              Start for free, upgrade when you're ready to monetize.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Starter */}
+            <Card className="border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow bg-white">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-[#0F172A]">Starter</CardTitle>
+                <CardDescription>Perfect for testing a new niche.</CardDescription>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-[#0F172A]">$0</span>
+                  <span className="text-[#64748B]">/month</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-3 text-sm text-[#64748B]">
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> 1 Directory
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> 100 Listings
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Basic Theme
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Community Support
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" variant="outline">Get Started</Button>
+              </CardFooter>
+            </Card>
+
+            {/* Growth */}
+            <Card className="border-[#22C55E] shadow-lg relative bg-white">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <Badge className="bg-[#22C55E] hover:bg-[#22C55E]">Most Popular</Badge>
+              </div>
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-[#0F172A]">Growth</CardTitle>
+                <CardDescription>For serious directory builders.</CardDescription>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-[#0F172A]">$29</span>
+                  <span className="text-[#64748B]">/month</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-3 text-sm text-[#64748B]">
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> 5 Directories
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Unlimited Listings
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> All Themes
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Custom Domains
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Remove Branding
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full bg-[#0F172A] hover:bg-[#0F172A]/90">Start Free Trial</Button>
+              </CardFooter>
+            </Card>
+
+            {/* Scale */}
+            <Card className="border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow bg-white">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-[#0F172A]">Scale</CardTitle>
+                <CardDescription>For agencies and networks.</CardDescription>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-[#0F172A]">$79</span>
+                  <span className="text-[#64748B]">/month</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-3 text-sm text-[#64748B]">
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Unlimited Directories
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> Priority Support
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> API Access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-[#22C55E]" /> White Label
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" variant="outline">Contact Sales</Button>
+              </CardFooter>
+            </Card>
           </div>
         </div>
       </section>
